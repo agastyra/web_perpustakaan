@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Peminjaman - Siswa</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <style>
+        /* Tata letak utama */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #layoutSidenav {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .sb-topnav {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1030;
+        }
+
+        /* Sidebar */
+        #layoutSidenav_nav {
+            width: 250px;
+            background-color: #343a40;
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 100%;
+            overflow-y: auto;
+            transition: transform 0.3s ease-in-out;
+            padding-top: 10px;
+        }
+
+        /* Konten utama */
+        #layoutSidenav_content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 250px;
+            transition: margin-left 0.3s ease-in-out;
+            width: calc(100% - 250px);
+            margin-top: 56px;
+        }
+
+        /* Responsif: Sidebar tertutup otomatis di layar kecil */
+        @media (max-width: 768px) {
+            #layoutSidenav_nav {
+                transform: translateX(-250px);
+            }
+            #layoutSidenav_nav.show {
+                transform: translateX(0);
+            }
+            #layoutSidenav_content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        /* Menu sidebar */
+        .sb-sidenav-menu {
+            padding: 10px;
+        }
+
+        .sb-sidenav-menu .nav-link {
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sb-sidenav-menu .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Ikon sejajar dengan teks */
+        .sb-sidenav-menu .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #f8f9fa;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="sb-nav-fixed">
+    <!-- Navbar -->
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand ps-3" href="#">Siswa Dashboard</a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Sidebar & Konten -->
+    <div id="layoutSidenav">
+        <!-- Sidebar -->
+        <div id="layoutSidenav_nav" class="bg-dark text-white">
+            <nav class="sb-sidenav accordion sb-sidenav-dark">
+                <div class="sb-sidenav-menu">
+                    <div class="sb-sidenav-menu-heading text-white">Menu</div>
+                    <a class="nav-link" href="#"> <i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    <a class="nav-link" href="#"> <i class="fas fa-book"></i> Buku</a>
+                    <a class="nav-link" href="#"> <i class="fas fa-clipboard"></i> Peminjaman</a>
+                    <a class="nav-link" href="#"> <i class="fas fa-gear"></i> Pengaturan</a>
+                    <a class="nav-link" href="#"> <i class="fas fa-right-from-bracket"></i> Logout</a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Konten Utama -->
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Peminjaman Buku</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">Halaman Peminjaman Buku</li>
+                    </ol>
+                    <form action="">
+                        <div class="row">
+                            <div class="col-12 col-md-4 form-group">
+                                <label for="nama" class="form-label">Nama Peminjam *</label>
+                                <input type="text" name="nama" id="nama" class="form-control" disabled>
+                            </div>
+                            <div class="col-12 col-md-4 form-group">
+                                <label for="tgl_pinjam" class="form-label">Tanggal Pinjam *</label>
+                                <input type="date" name="tgl_pinjam" id="tgl_pinjam" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col-12 col-md-4 form-group">
+                                <label for="tgl_kembali" class="form-label">Tanggal Kembali *</label>
+                                <input type="date" name="tgl_kembali" id="tgl_kembali" class="form-control">
+                            </div>
+                            <div class="col-12 col-md-4 form-group">
+                                <label for="buku" class="form-label">Buku 1 *</label>
+                                <select class="form-control" name="buku" id="buku">
+                                    <option selected>-Pilih Buku-</option>
+                                    <option value="bulan">Bulan - Tere Liye</option>
+                                    <option value="bumi">Bumi - Tere Liye</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col-12 col-md-4 form-group">
+                                <button class="btn btn-primary">Buat Peminjaman</button>
+                                <button class="btn btn-warning">Tambah Buku</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Web Perpustakaan 2023</div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.getElementById("sidebarToggle").addEventListener("click", function() {
+            document.getElementById("layoutSidenav_nav").classList.toggle("show");
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
