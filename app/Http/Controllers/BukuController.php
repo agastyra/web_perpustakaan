@@ -67,15 +67,16 @@ class BukuController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data = [
-            'buku_judul' => $request->input('buku_judul'),
-            'buku_isbn' => $request->input('buku_isbn'),
-            'buku_thnterbit' => $request->input('buku_thnterbit'),
-            'buku_penulis_id' => $request->input('buku_penulis_id'),
-            'buku_penerbit_id' => $request->input('buku_penerbit_id'),
-            'buku_kategori_id' => $request->input('buku_kategori_id'),
-            'buku_rak_id' => $request->input('buku_rak_id'),
-        ];
+        $data = $request->validate([
+            'buku_judul' => 'required',
+            'buku_isbn' => 'required',
+            'buku_thnterbit' => 'required',
+            'buku_penulis_id' => 'required',
+            'buku_penerbit_id' => 'required',
+            'buku_kategori_id' => 'required',
+            'buku_rak_id' => 'required',
+            'buku_urlgambar' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png']
+        ]);
 
         Buku::updateBuku($id, $data);
         return redirect()->route('buku.index')->with('updated', 'Data buku berhasil diupdate!');

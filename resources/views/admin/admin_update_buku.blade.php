@@ -13,16 +13,33 @@
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">Halaman Update Buku</li>
             </ol>
-
-            <form action="{{ route('buku.update', ['id' => $buku->buku_id]) }}" method="POST">
+            @if ($errors->any())
+            <div class="alert alert-danger my-3">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            <form action="{{ route('buku.update', ['id' => $buku->buku_id]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                @method('PATCH')
+                @method('PUT')
 
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label for="buku_id" class="form-label">ID Buku</label>
-                        <input type="text" id="buku_id" name="buku_id" class="form-control" value="{{ $buku->buku_id }}" readonly>
+                <div class="d-flex items-center gap-4">
+                    <div class="form-group">
+                        <label for="buku_urlgambar"
+                            class="form-label">Upload Sampul</label>
+                        <input type="file"
+                            name="buku_urlgambar"
+                            id="buku_urlgambar"
+                            class="form-control"
+                            accept="image/jpeg,image/png,image/jpg">
                     </div>
+                    <img src="{{ asset('storage/' . $buku->buku_urlgambar) }}"
+                        alt="{{ $buku->buku_judul }}"
+                        class="img-thumbnail"
+                        style="max-width: 200px; height: auto">
                 </div>
 
                 <div class="row g-3 mt-2">

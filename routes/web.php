@@ -104,7 +104,7 @@ Route::middleware(['auth', 'role'])->group(function () {
         Route::get('/buku/delete/{id}', [BukuController::class, 'destroy'])->name('buku.delete');
         Route::get('/buku', [BukuController::class, 'index'])->name(name: 'buku.index');
         Route::get('/buku/edit/{id}', [BukuController::class, 'edit'])->name('buku.edit');
-        Route::patch('/buku/update/{id}', [BukuController::class, 'update'])->name('buku.update');
+        Route::put('/buku/update/{id}', [BukuController::class, 'update'])->name('buku.update');
 
         //penulis
         Route::get('/penulis', [PenulisController::class, 'readpenulis'])->name('penulis');

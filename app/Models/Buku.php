@@ -73,12 +73,25 @@ class Buku extends Model
 
     protected static function updateBuku($id, $data)
     {
-        $buku = self::readBukuById($id);
-        if ($buku) {
-            DB::table('buku')->where('buku_id', $id)->update($data);
-            return $buku;
+        try {
+            DB::beginTransaction();
+            $buku = self::readBukuById($id);
+            if ($buku) {
+                if (isset($data["buku_urlgambar"]) && $data['buku_urlgambar']) {
+                    Storage::delete($buku->buku_urlgambar);
+                    $path = $data["buku_urlgambar"]->store('gambar_buku');
+                    $data["buku_urlgambar"] = $path;
+                }
+                DB::table('buku')->where('buku_id', $id)->update($data);
+                DB::commit();
+                return $buku;
+            }
+            DB::rollBack();
+            return null;
+        } catch (\Throwable $throwable) {
+            DB::rollBack();
+            throw new \Error($throwable->getMessage());
         }
-        return null;
     }
 
     protected static function readBukuById($id)
@@ -89,7 +102,23 @@ class Buku extends Model
 
     protected static function deleteBuku($id)
     {
-        return DB::table('buku')->where('buku_id', $id)->delete();
+        try {
+            DB::beginTransaction();
+            $buku = self::readBukuById($id);
+            if ($buku) {
+                if (isset($buku->buku_urlgambar)) {
+                    Storage::delete($buku->buku_urlgambar);
+                }
+                DB::table('buku')->where('buku_id', $id)->delete();
+                DB::commit();
+                return true;
+            }
+            DB::rollBack();
+            return false;
+        } catch (\Throwable $throwable) {
+            DB::rollBack();
+            throw new \Error($throwable->getMessage());
+        }
     }
 
 }
