@@ -223,29 +223,36 @@ class PagesController extends Controller
     {
         $data = $request->validate([
             'user_name' => 'required',
-            'user_email' => 'required',
+            'user_email' => ['required', 'email:dns', 'unique:users,user_email,' . $id],
             'user_username' => 'required',
             'user_alamat' => 'required',
-            'user_notelp' => 'required',
+            'user_notelp' => ['required', 'unique:users,user_notelp,' . $id],
         ]);
 
-        if ($request->has('user_password')) {
+        if (!is_null($request->user_password)) {
             $data['user_password'] = Hash::make($request->user_password);
+            $user = User::find($id);
+            $user->update($data);
+            return redirect()->route('pengaturan')->with('success', 'Data berhasil diperbarui.');
         }
-
+        
         $user = User::find($id);
-        $user->update($data);
-
-        if ($user->user_level == 'admin') {
-            return redirect()->route('adminPengaturan')->with('success', 'Data berhasil diperbarui.');;
-        }
-
-        return redirect()->route('siswaPengaturan')->with('success', 'Data berhasil diperbarui.');;
+        $user->update([
+            'user_name' => $request->user_name,
+            'user_email' => $request->user_email,
+            'user_username' => $request->user_username,
+            'user_alamat' => $request->user_alamat,
+            'user_notelp' => $request->user_notelp
+        ]);
+        return redirect()->route('pengaturan')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function upload_profile (Request $request, $id)
     {
         if ($request->hasFile('profile')) {
+            $request->validate([
+                'profile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=200,min_height=200,max_width=200,max_height=200',
+            ]);
             $data = $request->file('profile');
             User::upload_profile($id, $data);
             return redirect()->route('pengaturan')->with('success', 'Foto profil berhasil diperbarui!');

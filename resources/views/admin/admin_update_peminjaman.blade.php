@@ -131,6 +131,7 @@
     <script>
         const btnAddRow = $('#tambah-buku')
         const btnDelRow = $("#hapus-buku")
+        let bukuId = null;
 
         btnAddRow.on('click', addRow)
         btnDelRow.on('click', removeRow)
@@ -185,6 +186,7 @@
         $("#form-peminjaman").on("submit", submit)
 
         $(document).on('change', '.buku-select', onChangeBuku)
+        $(document).on('select2:opening', '.buku-select', onOpeningBuku)
         function renderDetailBuku() {
             const counter = $('#detail_buku tr').length + 1
 
@@ -210,20 +212,37 @@
                 </tr>
             `
         }
-        function onChangeBuku(e) {
+        function onOpeningBuku(e) {
             const cookie = document.cookie.split('; ').find(row => row.startsWith('peminjaman_detail=')).split("=")[1]
             const peminjaman_detail = JSON.parse(decodeURIComponent(cookie)) || []
-            const penulis = $(e.target).find('option:selected').data('buku-penulis')
-            const penerbit = $(e.target).find('option:selected').data('buku-penerbit')
-            const tr = $(e.target).closest('tr')
-            tr.find('.buku_penulis').text(penulis)
-            tr.find('.buku_penerbit').text(penerbit)
+            bukuId = e.target.value
+        }
 
-            peminjaman_detail.push({
-                buku_id: e.target.value,
-                buku_penulis: $(e.target).find('option:selected').data('bukuPenulis'),
-                buku_penerbit: $(e.target).find('option:selected').data('bukuPenerbit')
-            })
+        function onChangeBuku(e) {;
+            const cookie = document.cookie.split('; ').find(row => row.startsWith('peminjaman_detail=')).split("=")[1]
+            const peminjaman_detail = JSON.parse(decodeURIComponent(cookie)) || []
+            const buku_id = e.target.value
+            const buku_penulis = $(e.target).find('option:selected').data('bukuPenulis')
+            const buku_penerbit = $(e.target).find('option:selected').data('bukuPenerbit')
+            const tr = $(e.target).closest('tr')
+            tr.find('.buku_penulis').text(buku_penulis)
+            tr.find('.buku_penerbit').text(buku_penerbit)
+
+            const index = peminjaman_detail.findIndex(detail => detail.buku_id === bukuId)
+            
+            if (index === -1) {
+                peminjaman_detail.push({
+                    buku_id,
+                    buku_penulis,
+                    buku_penerbit
+                })
+            } else {
+                peminjaman_detail[index] = {
+                    buku_id,
+                    buku_penulis,
+                    buku_penerbit
+                }
+            }
 
             document.cookie = `peminjaman_detail=${encodeURIComponent(JSON.stringify((peminjaman_detail)))}; path=${location.pathname}; expires=${new Date(Date.now() + 60 * 1000).toUTCString()}`
         }

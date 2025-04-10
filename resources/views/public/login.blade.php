@@ -25,12 +25,14 @@
     <!-- Section Login -->
     <section class="login-container">
         <div class="card shadow-lg">
-            @if (session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @elseif(session('updated'))
-                <div class="alert alert-warning">{{ session('updated') }}</div>
-            @elseif(session('deleted'))
-                <div class="alert alert-danger">{{ session('deleted') }}</div>
+            @if ($errors->any())
+            <div class="alert alert-danger my-3">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
             @endif
             <div class="card-header text-center">
                 <img src="{{ asset('storage/img/book.png') }}" alt="Gambar Buku" width="80px" height="80px">
