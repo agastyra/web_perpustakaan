@@ -35,7 +35,7 @@
             </div>
             @endif
             <div class="card-header text-center">
-                <img src="{{ asset('storage/img/book.png') }}" alt="Gambar Buku" width="80px" height="80px">
+                <img src="{{ asset('assets/img/book.png') }}" alt="Gambar Buku" width="80px" height="80px">
                 <h3>Login - Web Perpustakaan</h3>
             </div>
             <div class="card-body">
